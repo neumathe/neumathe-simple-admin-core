@@ -33,6 +33,12 @@ type Position func(*sql.Selector)
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
 
+// SysBanner is the predicate function for sysbanner builders.
+type SysBanner func(*sql.Selector)
+
+// SysUserConfig is the predicate function for sysuserconfig builders.
+type SysUserConfig func(*sql.Selector)
+
 // Token is the predicate function for token builders.
 type Token func(*sql.Selector)
 

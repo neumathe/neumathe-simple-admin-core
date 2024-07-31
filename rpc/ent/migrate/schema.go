@@ -256,6 +256,42 @@ var (
 			},
 		},
 	}
+	// SysBannersColumns holds the columns for the "sys_banners" table.
+	SysBannersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Comment: "UUID"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
+		{Name: "show_at", Type: field.TypeInt8, Comment: "Show At | 1: web| 2:miniprogram | 展示位置 1网页 2小程序"},
+		{Name: "url", Type: field.TypeString, Comment: "Url | 图片链接"},
+	}
+	// SysBannersTable holds the schema information for the "sys_banners" table.
+	SysBannersTable = &schema.Table{
+		Name:       "sys_banners",
+		Columns:    SysBannersColumns,
+		PrimaryKey: []*schema.Column{SysBannersColumns[0]},
+	}
+	// SysUserConfigsColumns holds the columns for the "sys_user_configs" table.
+	SysUserConfigsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Comment: "UUID"},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "Delete Time | 删除日期"},
+		{Name: "anonymous", Type: field.TypeBool, Comment: "Anonymous | 匿名 0:不开启 1:开启"},
+		{Name: "show_answer", Type: field.TypeBool, Comment: "Show Answer | 默认显示答案 0:不开启 1:开启"},
+		{Name: "show_analysis", Type: field.TypeBool, Comment: "Show Analysis | 默认显示解析 0:不开启 1:开启"},
+		{Name: "show_comment", Type: field.TypeBool, Comment: "Show Comment | 默认显示评论 0:不开启 1:开启"},
+		{Name: "stuid", Type: field.TypeInt32, Nullable: true, Comment: "Stuid | 学号"},
+		{Name: "institute", Type: field.TypeInt16, Nullable: true, Comment: "institute | 学院"},
+		{Name: "email_is_check", Type: field.TypeBool, Comment: "Email Is Check | 邮箱是否通过验证 | 0 未通过 1 通过"},
+		{Name: "phone_is_check", Type: field.TypeBool, Comment: "Phone Is Check | 手机号是否验证通过 | 0 未通过 1 通过"},
+	}
+	// SysUserConfigsTable holds the schema information for the "sys_user_configs" table.
+	SysUserConfigsTable = &schema.Table{
+		Name:       "sys_user_configs",
+		Columns:    SysUserConfigsColumns,
+		PrimaryKey: []*schema.Column{SysUserConfigsColumns[0]},
+	}
 	// SysTokensColumns holds the columns for the "sys_tokens" table.
 	SysTokensColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Comment: "UUID"},
@@ -410,6 +446,8 @@ var (
 		SysOauthProvidersTable,
 		SysPositionsTable,
 		SysRolesTable,
+		SysBannersTable,
+		SysUserConfigsTable,
 		SysTokensTable,
 		SysUsersTable,
 		RoleMenusTable,
@@ -448,6 +486,12 @@ func init() {
 	}
 	SysRolesTable.Annotation = &entsql.Annotation{
 		Table: "sys_roles",
+	}
+	SysBannersTable.Annotation = &entsql.Annotation{
+		Table: "sys_banners",
+	}
+	SysUserConfigsTable.Annotation = &entsql.Annotation{
+		Table: "sys_user_configs",
 	}
 	SysTokensTable.Annotation = &entsql.Annotation{
 		Table: "sys_tokens",

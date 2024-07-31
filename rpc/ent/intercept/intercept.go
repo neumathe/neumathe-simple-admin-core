@@ -18,6 +18,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/predicate"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysbanner"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysuserconfig"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/token"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/user"
 )
@@ -321,6 +323,60 @@ func (f TraverseRole) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.RoleQuery", q)
 }
 
+// The SysBannerFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SysBannerFunc func(context.Context, *ent.SysBannerQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f SysBannerFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.SysBannerQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.SysBannerQuery", q)
+}
+
+// The TraverseSysBanner type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSysBanner func(context.Context, *ent.SysBannerQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSysBanner) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSysBanner) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.SysBannerQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.SysBannerQuery", q)
+}
+
+// The SysUserConfigFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SysUserConfigFunc func(context.Context, *ent.SysUserConfigQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f SysUserConfigFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.SysUserConfigQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.SysUserConfigQuery", q)
+}
+
+// The TraverseSysUserConfig type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSysUserConfig func(context.Context, *ent.SysUserConfigQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSysUserConfig) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSysUserConfig) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.SysUserConfigQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.SysUserConfigQuery", q)
+}
+
 // The TokenFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TokenFunc func(context.Context, *ent.TokenQuery) (ent.Value, error)
 
@@ -396,6 +452,10 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.PositionQuery, predicate.Position, position.OrderOption]{typ: ent.TypePosition, tq: q}, nil
 	case *ent.RoleQuery:
 		return &query[*ent.RoleQuery, predicate.Role, role.OrderOption]{typ: ent.TypeRole, tq: q}, nil
+	case *ent.SysBannerQuery:
+		return &query[*ent.SysBannerQuery, predicate.SysBanner, sysbanner.OrderOption]{typ: ent.TypeSysBanner, tq: q}, nil
+	case *ent.SysUserConfigQuery:
+		return &query[*ent.SysUserConfigQuery, predicate.SysUserConfig, sysuserconfig.OrderOption]{typ: ent.TypeSysUserConfig, tq: q}, nil
 	case *ent.TokenQuery:
 		return &query[*ent.TokenQuery, predicate.Token, token.OrderOption]{typ: ent.TypeToken, tq: q}, nil
 	case *ent.UserQuery:

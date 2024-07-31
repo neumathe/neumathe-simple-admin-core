@@ -320,6 +320,61 @@ message RoleMenuAuthorityResp {
   repeated uint64 menu_id = 1;
 }
 
+message SysBannerInfo {
+  optional string id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  //  Status 1: normal 2: ban | 状态 1 正常 2 禁用
+  optional uint32 status = 4;
+  //  Show At | 1: web| 2:miniprogram | 展示位置 1网页 2小程序
+  optional int32 show_at = 5;
+  //  Url | 图片链接
+  optional string url = 6;
+}
+
+message SysBannerListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string url = 3;
+}
+
+message SysBannerListResp {
+  uint64 total = 1;
+  repeated SysBannerInfo data = 2;
+}
+
+message SysUserConfigInfo {
+  optional string id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  //  Anonymous | 匿名 0:不开启 1:开启
+  optional bool anonymous = 4;
+  //  Show Answer | 默认显示答案 0:不开启 1:开启
+  optional bool show_answer = 5;
+  //  Show Analysis | 默认显示解析 0:不开启 1:开启
+  optional bool show_analysis = 6;
+  //  Show Comment | 默认显示评论 0:不开启 1:开启
+  optional bool show_comment = 7;
+  //  Stuid | 学号
+  optional int32 stuid = 8;
+  //  institute | 学院
+  optional int32 institute = 9;
+  //  Email Is Check | 邮箱是否通过验证 | 0 未通过 1 通过
+  optional bool email_is_check = 10;
+  //  Phone Is Check | 手机号是否验证通过 | 0 未通过 1 通过
+  optional bool phone_is_check = 11;
+}
+
+message SysUserConfigListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+}
+
+message SysUserConfigListResp {
+  uint64 total = 1;
+  repeated SysUserConfigInfo data = 2;
+}
+
 message TokenInfo {
   optional string id = 1;
   optional int64 created_at = 2;
@@ -507,6 +562,28 @@ service Core {
   rpc getRoleById(IDReq) returns (RoleInfo);
   //  group: role
   rpc deleteRole(IDsReq) returns (BaseResp);
+  //  SysBanner management
+  //  group: banner
+  rpc createSysBanner(SysBannerInfo) returns (BaseUUIDResp);
+  //  group: banner
+  rpc updateSysBanner(SysBannerInfo) returns (BaseResp);
+  //  group: banner
+  rpc getSysBannerList(SysBannerListReq) returns (SysBannerListResp);
+  //  group: banner
+  rpc getSysBannerById(UUIDReq) returns (SysBannerInfo);
+  //  group: banner
+  rpc deleteSysBanner(UUIDsReq) returns (BaseResp);
+  //  SysUserConfig management
+  //  group: user
+  rpc createSysUserConfig(SysUserConfigInfo) returns (BaseUUIDResp);
+  //  group: user
+  rpc updateSysUserConfig(SysUserConfigInfo) returns (BaseResp);
+  //  group: user
+  rpc getSysUserConfigList(SysUserConfigListReq) returns (SysUserConfigListResp);
+  //  group: user
+  rpc getSysUserConfigById(UUIDReq) returns (SysUserConfigInfo);
+  //  group: user
+  rpc deleteSysUserConfig(UUIDsReq) returns (BaseResp);
   //  Token management
   //  group: token
   rpc createToken(TokenInfo) returns (BaseUUIDResp);

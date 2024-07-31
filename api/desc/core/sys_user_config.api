@@ -1,0 +1,89 @@
+import "../base.api"
+
+type (
+    // The response data of sys user config information | SysUserConfig信息
+    SysUserConfigInfo {
+        BaseUUIDInfo
+
+        // Anonymous | 匿名 0:不开启 1:开启
+        Anonymous  *bool `json:"anonymous,optional"`
+
+        // Show Answer | 默认显示答案 0:不开启 1:开启
+        ShowAnswer  *bool `json:"showAnswer,optional"`
+
+        // Show Analysis | 默认显示解析 0:不开启 1:开启
+        ShowAnalysis  *bool `json:"showAnalysis,optional"`
+
+        // Show Comment | 默认显示评论 0:不开启 1:开启
+        ShowComment  *bool `json:"showComment,optional"`
+
+        // Stuid | 学号
+        Stuid  *int32 `json:"stuid,optional"`
+
+        // institute | 学院
+        Institute  *int32 `json:"institute,optional"`
+
+        // Email Is Check | 邮箱是否通过验证 | 0 未通过 1 通过
+        EmailIsCheck  *bool `json:"emailIsCheck,optional"`
+
+        // Phone Is Check | 手机号是否验证通过 | 0 未通过 1 通过
+        PhoneIsCheck  *bool `json:"phoneIsCheck,optional"`
+    }
+
+    // The response data of sys user config list | SysUserConfig列表数据
+    SysUserConfigListResp {
+        BaseDataInfo
+
+        // SysUserConfig list data | SysUserConfig列表数据
+        Data SysUserConfigListInfo `json:"data"`
+    }
+
+    // SysUserConfig list data | SysUserConfig列表数据
+    SysUserConfigListInfo {
+        BaseListInfo
+
+        // The API list data | SysUserConfig列表数据
+        Data  []SysUserConfigInfo  `json:"data"`
+    }
+
+    // Get sys user config list request params | SysUserConfig列表请求参数
+    SysUserConfigListReq {
+        PageInfo
+    }
+
+    // SysUserConfig information response | SysUserConfig信息返回体
+    SysUserConfigInfoResp {
+        BaseDataInfo
+
+        // SysUserConfig information | SysUserConfig数据
+        Data SysUserConfigInfo `json:"data"`
+    }
+)
+
+@server(
+    jwt: Auth
+    group: sysuserconfig
+    middleware: Authority
+)
+
+service Core {
+    // Create sys user config information | 创建SysUserConfig
+    @handler createSysUserConfig
+    post /sys_user_config/create (SysUserConfigInfo) returns (BaseMsgResp)
+
+    // Update sys user config information | 更新SysUserConfig
+    @handler updateSysUserConfig
+    post /sys_user_config/update (SysUserConfigInfo) returns (BaseMsgResp)
+
+    // Delete sys user config information | 删除SysUserConfig信息
+    @handler deleteSysUserConfig
+    post /sys_user_config/delete (UUIDsReq) returns (BaseMsgResp)
+
+    // Get sys user config list | 获取SysUserConfig列表
+    @handler getSysUserConfigList
+    post /sys_user_config/list (SysUserConfigListReq) returns (SysUserConfigListResp)
+
+    // Get sys user config by ID | 通过ID获取SysUserConfig
+    @handler getSysUserConfigById
+    post /sys_user_config (UUIDReq) returns (SysUserConfigInfoResp)
+}

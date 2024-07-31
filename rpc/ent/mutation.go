@@ -22,6 +22,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/predicate"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysbanner"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysuserconfig"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/token"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/user"
 )
@@ -44,6 +46,8 @@ const (
 	TypeOauthProvider    = "OauthProvider"
 	TypePosition         = "Position"
 	TypeRole             = "Role"
+	TypeSysBanner        = "SysBanner"
+	TypeSysUserConfig    = "SysUserConfig"
 	TypeToken            = "Token"
 	TypeUser             = "User"
 )
@@ -9616,6 +9620,1649 @@ func (m *RoleMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Role edge %s", name)
+}
+
+// SysBannerMutation represents an operation that mutates the SysBanner nodes in the graph.
+type SysBannerMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	created_at    *time.Time
+	updated_at    *time.Time
+	status        *uint8
+	addstatus     *int8
+	show_at       *int8
+	addshow_at    *int8
+	url           *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*SysBanner, error)
+	predicates    []predicate.SysBanner
+}
+
+var _ ent.Mutation = (*SysBannerMutation)(nil)
+
+// sysbannerOption allows management of the mutation configuration using functional options.
+type sysbannerOption func(*SysBannerMutation)
+
+// newSysBannerMutation creates new mutation for the SysBanner entity.
+func newSysBannerMutation(c config, op Op, opts ...sysbannerOption) *SysBannerMutation {
+	m := &SysBannerMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSysBanner,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSysBannerID sets the ID field of the mutation.
+func withSysBannerID(id uuid.UUID) sysbannerOption {
+	return func(m *SysBannerMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *SysBanner
+		)
+		m.oldValue = func(ctx context.Context) (*SysBanner, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().SysBanner.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSysBanner sets the old SysBanner of the mutation.
+func withSysBanner(node *SysBanner) sysbannerOption {
+	return func(m *SysBannerMutation) {
+		m.oldValue = func(context.Context) (*SysBanner, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SysBannerMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SysBannerMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of SysBanner entities.
+func (m *SysBannerMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SysBannerMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SysBannerMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().SysBanner.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *SysBannerMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *SysBannerMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the SysBanner entity.
+// If the SysBanner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysBannerMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *SysBannerMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *SysBannerMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *SysBannerMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the SysBanner entity.
+// If the SysBanner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysBannerMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *SysBannerMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *SysBannerMutation) SetStatus(u uint8) {
+	m.status = &u
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *SysBannerMutation) Status() (r uint8, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the SysBanner entity.
+// If the SysBanner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysBannerMutation) OldStatus(ctx context.Context) (v uint8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds u to the "status" field.
+func (m *SysBannerMutation) AddStatus(u int8) {
+	if m.addstatus != nil {
+		*m.addstatus += u
+	} else {
+		m.addstatus = &u
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *SysBannerMutation) AddedStatus() (r int8, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *SysBannerMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[sysbanner.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *SysBannerMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[sysbanner.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *SysBannerMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, sysbanner.FieldStatus)
+}
+
+// SetShowAt sets the "show_at" field.
+func (m *SysBannerMutation) SetShowAt(i int8) {
+	m.show_at = &i
+	m.addshow_at = nil
+}
+
+// ShowAt returns the value of the "show_at" field in the mutation.
+func (m *SysBannerMutation) ShowAt() (r int8, exists bool) {
+	v := m.show_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShowAt returns the old "show_at" field's value of the SysBanner entity.
+// If the SysBanner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysBannerMutation) OldShowAt(ctx context.Context) (v int8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShowAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShowAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShowAt: %w", err)
+	}
+	return oldValue.ShowAt, nil
+}
+
+// AddShowAt adds i to the "show_at" field.
+func (m *SysBannerMutation) AddShowAt(i int8) {
+	if m.addshow_at != nil {
+		*m.addshow_at += i
+	} else {
+		m.addshow_at = &i
+	}
+}
+
+// AddedShowAt returns the value that was added to the "show_at" field in this mutation.
+func (m *SysBannerMutation) AddedShowAt() (r int8, exists bool) {
+	v := m.addshow_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetShowAt resets all changes to the "show_at" field.
+func (m *SysBannerMutation) ResetShowAt() {
+	m.show_at = nil
+	m.addshow_at = nil
+}
+
+// SetURL sets the "url" field.
+func (m *SysBannerMutation) SetURL(s string) {
+	m.url = &s
+}
+
+// URL returns the value of the "url" field in the mutation.
+func (m *SysBannerMutation) URL() (r string, exists bool) {
+	v := m.url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldURL returns the old "url" field's value of the SysBanner entity.
+// If the SysBanner object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysBannerMutation) OldURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+	}
+	return oldValue.URL, nil
+}
+
+// ResetURL resets all changes to the "url" field.
+func (m *SysBannerMutation) ResetURL() {
+	m.url = nil
+}
+
+// Where appends a list predicates to the SysBannerMutation builder.
+func (m *SysBannerMutation) Where(ps ...predicate.SysBanner) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the SysBannerMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SysBannerMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.SysBanner, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *SysBannerMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SysBannerMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (SysBanner).
+func (m *SysBannerMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SysBannerMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.created_at != nil {
+		fields = append(fields, sysbanner.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, sysbanner.FieldUpdatedAt)
+	}
+	if m.status != nil {
+		fields = append(fields, sysbanner.FieldStatus)
+	}
+	if m.show_at != nil {
+		fields = append(fields, sysbanner.FieldShowAt)
+	}
+	if m.url != nil {
+		fields = append(fields, sysbanner.FieldURL)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SysBannerMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case sysbanner.FieldCreatedAt:
+		return m.CreatedAt()
+	case sysbanner.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case sysbanner.FieldStatus:
+		return m.Status()
+	case sysbanner.FieldShowAt:
+		return m.ShowAt()
+	case sysbanner.FieldURL:
+		return m.URL()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SysBannerMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case sysbanner.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case sysbanner.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case sysbanner.FieldStatus:
+		return m.OldStatus(ctx)
+	case sysbanner.FieldShowAt:
+		return m.OldShowAt(ctx)
+	case sysbanner.FieldURL:
+		return m.OldURL(ctx)
+	}
+	return nil, fmt.Errorf("unknown SysBanner field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SysBannerMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case sysbanner.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case sysbanner.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case sysbanner.FieldStatus:
+		v, ok := value.(uint8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case sysbanner.FieldShowAt:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShowAt(v)
+		return nil
+	case sysbanner.FieldURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetURL(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SysBanner field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SysBannerMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, sysbanner.FieldStatus)
+	}
+	if m.addshow_at != nil {
+		fields = append(fields, sysbanner.FieldShowAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SysBannerMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case sysbanner.FieldStatus:
+		return m.AddedStatus()
+	case sysbanner.FieldShowAt:
+		return m.AddedShowAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SysBannerMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case sysbanner.FieldStatus:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	case sysbanner.FieldShowAt:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddShowAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SysBanner numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SysBannerMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(sysbanner.FieldStatus) {
+		fields = append(fields, sysbanner.FieldStatus)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SysBannerMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SysBannerMutation) ClearField(name string) error {
+	switch name {
+	case sysbanner.FieldStatus:
+		m.ClearStatus()
+		return nil
+	}
+	return fmt.Errorf("unknown SysBanner nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SysBannerMutation) ResetField(name string) error {
+	switch name {
+	case sysbanner.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case sysbanner.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case sysbanner.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case sysbanner.FieldShowAt:
+		m.ResetShowAt()
+		return nil
+	case sysbanner.FieldURL:
+		m.ResetURL()
+		return nil
+	}
+	return fmt.Errorf("unknown SysBanner field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SysBannerMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SysBannerMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SysBannerMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SysBannerMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SysBannerMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SysBannerMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SysBannerMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown SysBanner unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SysBannerMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown SysBanner edge %s", name)
+}
+
+// SysUserConfigMutation represents an operation that mutates the SysUserConfig nodes in the graph.
+type SysUserConfigMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *uuid.UUID
+	created_at     *time.Time
+	updated_at     *time.Time
+	deleted_at     *time.Time
+	anonymous      *bool
+	show_answer    *bool
+	show_analysis  *bool
+	show_comment   *bool
+	stuid          *int32
+	addstuid       *int32
+	institute      *int16
+	addinstitute   *int16
+	email_is_check *bool
+	phone_is_check *bool
+	clearedFields  map[string]struct{}
+	done           bool
+	oldValue       func(context.Context) (*SysUserConfig, error)
+	predicates     []predicate.SysUserConfig
+}
+
+var _ ent.Mutation = (*SysUserConfigMutation)(nil)
+
+// sysuserconfigOption allows management of the mutation configuration using functional options.
+type sysuserconfigOption func(*SysUserConfigMutation)
+
+// newSysUserConfigMutation creates new mutation for the SysUserConfig entity.
+func newSysUserConfigMutation(c config, op Op, opts ...sysuserconfigOption) *SysUserConfigMutation {
+	m := &SysUserConfigMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSysUserConfig,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSysUserConfigID sets the ID field of the mutation.
+func withSysUserConfigID(id uuid.UUID) sysuserconfigOption {
+	return func(m *SysUserConfigMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *SysUserConfig
+		)
+		m.oldValue = func(ctx context.Context) (*SysUserConfig, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().SysUserConfig.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSysUserConfig sets the old SysUserConfig of the mutation.
+func withSysUserConfig(node *SysUserConfig) sysuserconfigOption {
+	return func(m *SysUserConfigMutation) {
+		m.oldValue = func(context.Context) (*SysUserConfig, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SysUserConfigMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SysUserConfigMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of SysUserConfig entities.
+func (m *SysUserConfigMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SysUserConfigMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SysUserConfigMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().SysUserConfig.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *SysUserConfigMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *SysUserConfigMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *SysUserConfigMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *SysUserConfigMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *SysUserConfigMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *SysUserConfigMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *SysUserConfigMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *SysUserConfigMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *SysUserConfigMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[sysuserconfig.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *SysUserConfigMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[sysuserconfig.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *SysUserConfigMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, sysuserconfig.FieldDeletedAt)
+}
+
+// SetAnonymous sets the "anonymous" field.
+func (m *SysUserConfigMutation) SetAnonymous(b bool) {
+	m.anonymous = &b
+}
+
+// Anonymous returns the value of the "anonymous" field in the mutation.
+func (m *SysUserConfigMutation) Anonymous() (r bool, exists bool) {
+	v := m.anonymous
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnonymous returns the old "anonymous" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldAnonymous(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAnonymous is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAnonymous requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnonymous: %w", err)
+	}
+	return oldValue.Anonymous, nil
+}
+
+// ResetAnonymous resets all changes to the "anonymous" field.
+func (m *SysUserConfigMutation) ResetAnonymous() {
+	m.anonymous = nil
+}
+
+// SetShowAnswer sets the "show_answer" field.
+func (m *SysUserConfigMutation) SetShowAnswer(b bool) {
+	m.show_answer = &b
+}
+
+// ShowAnswer returns the value of the "show_answer" field in the mutation.
+func (m *SysUserConfigMutation) ShowAnswer() (r bool, exists bool) {
+	v := m.show_answer
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShowAnswer returns the old "show_answer" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldShowAnswer(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShowAnswer is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShowAnswer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShowAnswer: %w", err)
+	}
+	return oldValue.ShowAnswer, nil
+}
+
+// ResetShowAnswer resets all changes to the "show_answer" field.
+func (m *SysUserConfigMutation) ResetShowAnswer() {
+	m.show_answer = nil
+}
+
+// SetShowAnalysis sets the "show_analysis" field.
+func (m *SysUserConfigMutation) SetShowAnalysis(b bool) {
+	m.show_analysis = &b
+}
+
+// ShowAnalysis returns the value of the "show_analysis" field in the mutation.
+func (m *SysUserConfigMutation) ShowAnalysis() (r bool, exists bool) {
+	v := m.show_analysis
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShowAnalysis returns the old "show_analysis" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldShowAnalysis(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShowAnalysis is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShowAnalysis requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShowAnalysis: %w", err)
+	}
+	return oldValue.ShowAnalysis, nil
+}
+
+// ResetShowAnalysis resets all changes to the "show_analysis" field.
+func (m *SysUserConfigMutation) ResetShowAnalysis() {
+	m.show_analysis = nil
+}
+
+// SetShowComment sets the "show_comment" field.
+func (m *SysUserConfigMutation) SetShowComment(b bool) {
+	m.show_comment = &b
+}
+
+// ShowComment returns the value of the "show_comment" field in the mutation.
+func (m *SysUserConfigMutation) ShowComment() (r bool, exists bool) {
+	v := m.show_comment
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShowComment returns the old "show_comment" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldShowComment(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShowComment is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShowComment requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShowComment: %w", err)
+	}
+	return oldValue.ShowComment, nil
+}
+
+// ResetShowComment resets all changes to the "show_comment" field.
+func (m *SysUserConfigMutation) ResetShowComment() {
+	m.show_comment = nil
+}
+
+// SetStuid sets the "stuid" field.
+func (m *SysUserConfigMutation) SetStuid(i int32) {
+	m.stuid = &i
+	m.addstuid = nil
+}
+
+// Stuid returns the value of the "stuid" field in the mutation.
+func (m *SysUserConfigMutation) Stuid() (r int32, exists bool) {
+	v := m.stuid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStuid returns the old "stuid" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldStuid(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStuid is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStuid requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStuid: %w", err)
+	}
+	return oldValue.Stuid, nil
+}
+
+// AddStuid adds i to the "stuid" field.
+func (m *SysUserConfigMutation) AddStuid(i int32) {
+	if m.addstuid != nil {
+		*m.addstuid += i
+	} else {
+		m.addstuid = &i
+	}
+}
+
+// AddedStuid returns the value that was added to the "stuid" field in this mutation.
+func (m *SysUserConfigMutation) AddedStuid() (r int32, exists bool) {
+	v := m.addstuid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStuid clears the value of the "stuid" field.
+func (m *SysUserConfigMutation) ClearStuid() {
+	m.stuid = nil
+	m.addstuid = nil
+	m.clearedFields[sysuserconfig.FieldStuid] = struct{}{}
+}
+
+// StuidCleared returns if the "stuid" field was cleared in this mutation.
+func (m *SysUserConfigMutation) StuidCleared() bool {
+	_, ok := m.clearedFields[sysuserconfig.FieldStuid]
+	return ok
+}
+
+// ResetStuid resets all changes to the "stuid" field.
+func (m *SysUserConfigMutation) ResetStuid() {
+	m.stuid = nil
+	m.addstuid = nil
+	delete(m.clearedFields, sysuserconfig.FieldStuid)
+}
+
+// SetInstitute sets the "institute" field.
+func (m *SysUserConfigMutation) SetInstitute(i int16) {
+	m.institute = &i
+	m.addinstitute = nil
+}
+
+// Institute returns the value of the "institute" field in the mutation.
+func (m *SysUserConfigMutation) Institute() (r int16, exists bool) {
+	v := m.institute
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInstitute returns the old "institute" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldInstitute(ctx context.Context) (v int16, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInstitute is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInstitute requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInstitute: %w", err)
+	}
+	return oldValue.Institute, nil
+}
+
+// AddInstitute adds i to the "institute" field.
+func (m *SysUserConfigMutation) AddInstitute(i int16) {
+	if m.addinstitute != nil {
+		*m.addinstitute += i
+	} else {
+		m.addinstitute = &i
+	}
+}
+
+// AddedInstitute returns the value that was added to the "institute" field in this mutation.
+func (m *SysUserConfigMutation) AddedInstitute() (r int16, exists bool) {
+	v := m.addinstitute
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearInstitute clears the value of the "institute" field.
+func (m *SysUserConfigMutation) ClearInstitute() {
+	m.institute = nil
+	m.addinstitute = nil
+	m.clearedFields[sysuserconfig.FieldInstitute] = struct{}{}
+}
+
+// InstituteCleared returns if the "institute" field was cleared in this mutation.
+func (m *SysUserConfigMutation) InstituteCleared() bool {
+	_, ok := m.clearedFields[sysuserconfig.FieldInstitute]
+	return ok
+}
+
+// ResetInstitute resets all changes to the "institute" field.
+func (m *SysUserConfigMutation) ResetInstitute() {
+	m.institute = nil
+	m.addinstitute = nil
+	delete(m.clearedFields, sysuserconfig.FieldInstitute)
+}
+
+// SetEmailIsCheck sets the "email_is_check" field.
+func (m *SysUserConfigMutation) SetEmailIsCheck(b bool) {
+	m.email_is_check = &b
+}
+
+// EmailIsCheck returns the value of the "email_is_check" field in the mutation.
+func (m *SysUserConfigMutation) EmailIsCheck() (r bool, exists bool) {
+	v := m.email_is_check
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailIsCheck returns the old "email_is_check" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldEmailIsCheck(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailIsCheck is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailIsCheck requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailIsCheck: %w", err)
+	}
+	return oldValue.EmailIsCheck, nil
+}
+
+// ResetEmailIsCheck resets all changes to the "email_is_check" field.
+func (m *SysUserConfigMutation) ResetEmailIsCheck() {
+	m.email_is_check = nil
+}
+
+// SetPhoneIsCheck sets the "phone_is_check" field.
+func (m *SysUserConfigMutation) SetPhoneIsCheck(b bool) {
+	m.phone_is_check = &b
+}
+
+// PhoneIsCheck returns the value of the "phone_is_check" field in the mutation.
+func (m *SysUserConfigMutation) PhoneIsCheck() (r bool, exists bool) {
+	v := m.phone_is_check
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhoneIsCheck returns the old "phone_is_check" field's value of the SysUserConfig entity.
+// If the SysUserConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SysUserConfigMutation) OldPhoneIsCheck(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPhoneIsCheck is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPhoneIsCheck requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhoneIsCheck: %w", err)
+	}
+	return oldValue.PhoneIsCheck, nil
+}
+
+// ResetPhoneIsCheck resets all changes to the "phone_is_check" field.
+func (m *SysUserConfigMutation) ResetPhoneIsCheck() {
+	m.phone_is_check = nil
+}
+
+// Where appends a list predicates to the SysUserConfigMutation builder.
+func (m *SysUserConfigMutation) Where(ps ...predicate.SysUserConfig) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the SysUserConfigMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SysUserConfigMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.SysUserConfig, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *SysUserConfigMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SysUserConfigMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (SysUserConfig).
+func (m *SysUserConfigMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SysUserConfigMutation) Fields() []string {
+	fields := make([]string, 0, 11)
+	if m.created_at != nil {
+		fields = append(fields, sysuserconfig.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, sysuserconfig.FieldUpdatedAt)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, sysuserconfig.FieldDeletedAt)
+	}
+	if m.anonymous != nil {
+		fields = append(fields, sysuserconfig.FieldAnonymous)
+	}
+	if m.show_answer != nil {
+		fields = append(fields, sysuserconfig.FieldShowAnswer)
+	}
+	if m.show_analysis != nil {
+		fields = append(fields, sysuserconfig.FieldShowAnalysis)
+	}
+	if m.show_comment != nil {
+		fields = append(fields, sysuserconfig.FieldShowComment)
+	}
+	if m.stuid != nil {
+		fields = append(fields, sysuserconfig.FieldStuid)
+	}
+	if m.institute != nil {
+		fields = append(fields, sysuserconfig.FieldInstitute)
+	}
+	if m.email_is_check != nil {
+		fields = append(fields, sysuserconfig.FieldEmailIsCheck)
+	}
+	if m.phone_is_check != nil {
+		fields = append(fields, sysuserconfig.FieldPhoneIsCheck)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SysUserConfigMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case sysuserconfig.FieldCreatedAt:
+		return m.CreatedAt()
+	case sysuserconfig.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case sysuserconfig.FieldDeletedAt:
+		return m.DeletedAt()
+	case sysuserconfig.FieldAnonymous:
+		return m.Anonymous()
+	case sysuserconfig.FieldShowAnswer:
+		return m.ShowAnswer()
+	case sysuserconfig.FieldShowAnalysis:
+		return m.ShowAnalysis()
+	case sysuserconfig.FieldShowComment:
+		return m.ShowComment()
+	case sysuserconfig.FieldStuid:
+		return m.Stuid()
+	case sysuserconfig.FieldInstitute:
+		return m.Institute()
+	case sysuserconfig.FieldEmailIsCheck:
+		return m.EmailIsCheck()
+	case sysuserconfig.FieldPhoneIsCheck:
+		return m.PhoneIsCheck()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SysUserConfigMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case sysuserconfig.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case sysuserconfig.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case sysuserconfig.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case sysuserconfig.FieldAnonymous:
+		return m.OldAnonymous(ctx)
+	case sysuserconfig.FieldShowAnswer:
+		return m.OldShowAnswer(ctx)
+	case sysuserconfig.FieldShowAnalysis:
+		return m.OldShowAnalysis(ctx)
+	case sysuserconfig.FieldShowComment:
+		return m.OldShowComment(ctx)
+	case sysuserconfig.FieldStuid:
+		return m.OldStuid(ctx)
+	case sysuserconfig.FieldInstitute:
+		return m.OldInstitute(ctx)
+	case sysuserconfig.FieldEmailIsCheck:
+		return m.OldEmailIsCheck(ctx)
+	case sysuserconfig.FieldPhoneIsCheck:
+		return m.OldPhoneIsCheck(ctx)
+	}
+	return nil, fmt.Errorf("unknown SysUserConfig field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SysUserConfigMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case sysuserconfig.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case sysuserconfig.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case sysuserconfig.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case sysuserconfig.FieldAnonymous:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnonymous(v)
+		return nil
+	case sysuserconfig.FieldShowAnswer:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShowAnswer(v)
+		return nil
+	case sysuserconfig.FieldShowAnalysis:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShowAnalysis(v)
+		return nil
+	case sysuserconfig.FieldShowComment:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShowComment(v)
+		return nil
+	case sysuserconfig.FieldStuid:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStuid(v)
+		return nil
+	case sysuserconfig.FieldInstitute:
+		v, ok := value.(int16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInstitute(v)
+		return nil
+	case sysuserconfig.FieldEmailIsCheck:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailIsCheck(v)
+		return nil
+	case sysuserconfig.FieldPhoneIsCheck:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhoneIsCheck(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SysUserConfig field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SysUserConfigMutation) AddedFields() []string {
+	var fields []string
+	if m.addstuid != nil {
+		fields = append(fields, sysuserconfig.FieldStuid)
+	}
+	if m.addinstitute != nil {
+		fields = append(fields, sysuserconfig.FieldInstitute)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SysUserConfigMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case sysuserconfig.FieldStuid:
+		return m.AddedStuid()
+	case sysuserconfig.FieldInstitute:
+		return m.AddedInstitute()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SysUserConfigMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case sysuserconfig.FieldStuid:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStuid(v)
+		return nil
+	case sysuserconfig.FieldInstitute:
+		v, ok := value.(int16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddInstitute(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SysUserConfig numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SysUserConfigMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(sysuserconfig.FieldDeletedAt) {
+		fields = append(fields, sysuserconfig.FieldDeletedAt)
+	}
+	if m.FieldCleared(sysuserconfig.FieldStuid) {
+		fields = append(fields, sysuserconfig.FieldStuid)
+	}
+	if m.FieldCleared(sysuserconfig.FieldInstitute) {
+		fields = append(fields, sysuserconfig.FieldInstitute)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SysUserConfigMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SysUserConfigMutation) ClearField(name string) error {
+	switch name {
+	case sysuserconfig.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case sysuserconfig.FieldStuid:
+		m.ClearStuid()
+		return nil
+	case sysuserconfig.FieldInstitute:
+		m.ClearInstitute()
+		return nil
+	}
+	return fmt.Errorf("unknown SysUserConfig nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SysUserConfigMutation) ResetField(name string) error {
+	switch name {
+	case sysuserconfig.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case sysuserconfig.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case sysuserconfig.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case sysuserconfig.FieldAnonymous:
+		m.ResetAnonymous()
+		return nil
+	case sysuserconfig.FieldShowAnswer:
+		m.ResetShowAnswer()
+		return nil
+	case sysuserconfig.FieldShowAnalysis:
+		m.ResetShowAnalysis()
+		return nil
+	case sysuserconfig.FieldShowComment:
+		m.ResetShowComment()
+		return nil
+	case sysuserconfig.FieldStuid:
+		m.ResetStuid()
+		return nil
+	case sysuserconfig.FieldInstitute:
+		m.ResetInstitute()
+		return nil
+	case sysuserconfig.FieldEmailIsCheck:
+		m.ResetEmailIsCheck()
+		return nil
+	case sysuserconfig.FieldPhoneIsCheck:
+		m.ResetPhoneIsCheck()
+		return nil
+	}
+	return fmt.Errorf("unknown SysUserConfig field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SysUserConfigMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SysUserConfigMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SysUserConfigMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SysUserConfigMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SysUserConfigMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SysUserConfigMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SysUserConfigMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown SysUserConfig unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SysUserConfigMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown SysUserConfig edge %s", name)
 }
 
 // TokenMutation represents an operation that mutates the Token nodes in the graph.

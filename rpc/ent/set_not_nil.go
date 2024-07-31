@@ -2025,6 +2025,342 @@ func (r *RoleCreate) SetNotNilSort(value *uint32) *RoleCreate {
 }
 
 // set field if value's pointer is not nil.
+func (sb *SysBannerUpdate) SetNotNilUpdatedAt(value *time.Time) *SysBannerUpdate {
+	if value != nil {
+		return sb.SetUpdatedAt(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerUpdateOne) SetNotNilUpdatedAt(value *time.Time) *SysBannerUpdateOne {
+	if value != nil {
+		return sb.SetUpdatedAt(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerCreate) SetNotNilUpdatedAt(value *time.Time) *SysBannerCreate {
+	if value != nil {
+		return sb.SetUpdatedAt(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerUpdate) SetNotNilStatus(value *uint8) *SysBannerUpdate {
+	if value != nil {
+		return sb.SetStatus(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerUpdateOne) SetNotNilStatus(value *uint8) *SysBannerUpdateOne {
+	if value != nil {
+		return sb.SetStatus(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerCreate) SetNotNilStatus(value *uint8) *SysBannerCreate {
+	if value != nil {
+		return sb.SetStatus(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerUpdate) SetNotNilShowAt(value *int8) *SysBannerUpdate {
+	if value != nil {
+		return sb.SetShowAt(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerUpdateOne) SetNotNilShowAt(value *int8) *SysBannerUpdateOne {
+	if value != nil {
+		return sb.SetShowAt(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerCreate) SetNotNilShowAt(value *int8) *SysBannerCreate {
+	if value != nil {
+		return sb.SetShowAt(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerUpdate) SetNotNilURL(value *string) *SysBannerUpdate {
+	if value != nil {
+		return sb.SetURL(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerUpdateOne) SetNotNilURL(value *string) *SysBannerUpdateOne {
+	if value != nil {
+		return sb.SetURL(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (sb *SysBannerCreate) SetNotNilURL(value *string) *SysBannerCreate {
+	if value != nil {
+		return sb.SetURL(*value)
+	}
+	return sb
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilUpdatedAt(value *time.Time) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetUpdatedAt(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilUpdatedAt(value *time.Time) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetUpdatedAt(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilUpdatedAt(value *time.Time) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetUpdatedAt(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilDeletedAt(value *time.Time) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetDeletedAt(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilDeletedAt(value *time.Time) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetDeletedAt(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilDeletedAt(value *time.Time) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetDeletedAt(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilAnonymous(value *bool) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetAnonymous(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilAnonymous(value *bool) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetAnonymous(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilAnonymous(value *bool) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetAnonymous(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilShowAnswer(value *bool) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetShowAnswer(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilShowAnswer(value *bool) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetShowAnswer(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilShowAnswer(value *bool) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetShowAnswer(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilShowAnalysis(value *bool) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetShowAnalysis(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilShowAnalysis(value *bool) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetShowAnalysis(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilShowAnalysis(value *bool) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetShowAnalysis(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilShowComment(value *bool) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetShowComment(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilShowComment(value *bool) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetShowComment(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilShowComment(value *bool) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetShowComment(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilStuid(value *int32) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetStuid(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilStuid(value *int32) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetStuid(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilStuid(value *int32) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetStuid(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilInstitute(value *int16) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetInstitute(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilInstitute(value *int16) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetInstitute(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilInstitute(value *int16) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetInstitute(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilEmailIsCheck(value *bool) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetEmailIsCheck(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilEmailIsCheck(value *bool) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetEmailIsCheck(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilEmailIsCheck(value *bool) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetEmailIsCheck(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdate) SetNotNilPhoneIsCheck(value *bool) *SysUserConfigUpdate {
+	if value != nil {
+		return suc.SetPhoneIsCheck(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigUpdateOne) SetNotNilPhoneIsCheck(value *bool) *SysUserConfigUpdateOne {
+	if value != nil {
+		return suc.SetPhoneIsCheck(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
+func (suc *SysUserConfigCreate) SetNotNilPhoneIsCheck(value *bool) *SysUserConfigCreate {
+	if value != nil {
+		return suc.SetPhoneIsCheck(*value)
+	}
+	return suc
+}
+
+// set field if value's pointer is not nil.
 func (t *TokenUpdate) SetNotNilUpdatedAt(value *time.Time) *TokenUpdate {
 	if value != nil {
 		return t.SetUpdatedAt(*value)

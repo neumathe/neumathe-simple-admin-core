@@ -15,6 +15,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysbanner"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysuserconfig"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/token"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/user"
 )
@@ -786,6 +788,168 @@ func (r *RoleQuery) Page(
 
 	r = r.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
 	list, err := r.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
+type SysBannerPager struct {
+	Order  sysbanner.OrderOption
+	Filter func(*SysBannerQuery) (*SysBannerQuery, error)
+}
+
+// SysBannerPaginateOption enables pagination customization.
+type SysBannerPaginateOption func(*SysBannerPager)
+
+// DefaultSysBannerOrder is the default ordering of SysBanner.
+var DefaultSysBannerOrder = Desc(sysbanner.FieldID)
+
+func newSysBannerPager(opts []SysBannerPaginateOption) (*SysBannerPager, error) {
+	pager := &SysBannerPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultSysBannerOrder
+	}
+	return pager, nil
+}
+
+func (p *SysBannerPager) ApplyFilter(query *SysBannerQuery) (*SysBannerQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// SysBannerPageList is SysBanner PageList result.
+type SysBannerPageList struct {
+	List        []*SysBanner `json:"list"`
+	PageDetails *PageDetails `json:"pageDetails"`
+}
+
+func (sb *SysBannerQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...SysBannerPaginateOption,
+) (*SysBannerPageList, error) {
+
+	pager, err := newSysBannerPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if sb, err = pager.ApplyFilter(sb); err != nil {
+		return nil, err
+	}
+
+	ret := &SysBannerPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	query := sb.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		sb = sb.Order(pager.Order)
+	} else {
+		sb = sb.Order(DefaultSysBannerOrder)
+	}
+
+	sb = sb.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := sb.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
+type SysUserConfigPager struct {
+	Order  sysuserconfig.OrderOption
+	Filter func(*SysUserConfigQuery) (*SysUserConfigQuery, error)
+}
+
+// SysUserConfigPaginateOption enables pagination customization.
+type SysUserConfigPaginateOption func(*SysUserConfigPager)
+
+// DefaultSysUserConfigOrder is the default ordering of SysUserConfig.
+var DefaultSysUserConfigOrder = Desc(sysuserconfig.FieldID)
+
+func newSysUserConfigPager(opts []SysUserConfigPaginateOption) (*SysUserConfigPager, error) {
+	pager := &SysUserConfigPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultSysUserConfigOrder
+	}
+	return pager, nil
+}
+
+func (p *SysUserConfigPager) ApplyFilter(query *SysUserConfigQuery) (*SysUserConfigQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// SysUserConfigPageList is SysUserConfig PageList result.
+type SysUserConfigPageList struct {
+	List        []*SysUserConfig `json:"list"`
+	PageDetails *PageDetails     `json:"pageDetails"`
+}
+
+func (suc *SysUserConfigQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...SysUserConfigPaginateOption,
+) (*SysUserConfigPageList, error) {
+
+	pager, err := newSysUserConfigPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if suc, err = pager.ApplyFilter(suc); err != nil {
+		return nil, err
+	}
+
+	ret := &SysUserConfigPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	query := suc.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		suc = suc.Order(pager.Order)
+	} else {
+		suc = suc.Order(DefaultSysUserConfigOrder)
+	}
+
+	suc = suc.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := suc.All(ctx)
 	if err != nil {
 		return nil, err
 	}

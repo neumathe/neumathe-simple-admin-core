@@ -23,6 +23,8 @@ import (
 	role "github.com/suyuan32/simple-admin-core/api/internal/handler/role"
 	smslog "github.com/suyuan32/simple-admin-core/api/internal/handler/smslog"
 	smsprovider "github.com/suyuan32/simple-admin-core/api/internal/handler/smsprovider"
+	sysbanner "github.com/suyuan32/simple-admin-core/api/internal/handler/sysbanner"
+	sysuserconfig "github.com/suyuan32/simple-admin-core/api/internal/handler/sysuserconfig"
 	task "github.com/suyuan32/simple-admin-core/api/internal/handler/task"
 	tasklog "github.com/suyuan32/simple-admin-core/api/internal/handler/tasklog"
 	token "github.com/suyuan32/simple-admin-core/api/internal/handler/token"
@@ -831,5 +833,73 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: publicapi.GetPublicSystemConfigurationListHandler(serverCtx),
 			},
 		},
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_banner/create",
+					Handler: sysbanner.CreateSysBannerHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_banner/update",
+					Handler: sysbanner.UpdateSysBannerHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_banner/delete",
+					Handler: sysbanner.DeleteSysBannerHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_banner/list",
+					Handler: sysbanner.GetSysBannerListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_banner",
+					Handler: sysbanner.GetSysBannerByIdHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_user_config/create",
+					Handler: sysuserconfig.CreateSysUserConfigHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_user_config/update",
+					Handler: sysuserconfig.UpdateSysUserConfigHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_user_config/delete",
+					Handler: sysuserconfig.DeleteSysUserConfigHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_user_config/list",
+					Handler: sysuserconfig.GetSysUserConfigListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/sys_user_config",
+					Handler: sysuserconfig.GetSysUserConfigByIdHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }

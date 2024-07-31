@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/utils/pointy"
 
 	"github.com/suyuan32/simple-admin-core/api/internal/svc"
 	"github.com/suyuan32/simple-admin-core/api/internal/types"
@@ -39,6 +40,20 @@ func (l *CreateUserLogic) CreateUser(req *types.UserInfo) (resp *types.BaseMsgRe
 			Avatar:       req.Avatar,
 			DepartmentId: req.DepartmentId,
 			PositionIds:  req.PositionIds,
+		})
+	if err != nil {
+		return nil, err
+	}
+	_, err = l.svcCtx.CoreRpc.CreateSysUserConfig(l.ctx,
+		&core.SysUserConfigInfo{
+			Anonymous:    pointy.GetPointer(false),
+			ShowAnswer:   pointy.GetPointer(false),
+			ShowAnalysis: pointy.GetPointer(false),
+			ShowComment:  pointy.GetPointer(true),
+			Stuid:        nil,
+			Institute:    nil,
+			EmailIsCheck: pointy.GetPointer(false),
+			PhoneIsCheck: pointy.GetPointer(false),
 		})
 	if err != nil {
 		return nil, err

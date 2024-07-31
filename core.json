@@ -2208,6 +2208,286 @@
         }
       }
     },
+    "/sys_banner": {
+      "post": {
+        "description": "Get sys banner by ID | 通过ID获取SysBanner",
+        "tags": [
+          "sysbanner"
+        ],
+        "summary": "Get sys banner by ID | 通过ID获取SysBanner",
+        "operationId": "GetSysBannerById",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/UUIDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SysBannerInfoResp",
+            "schema": {
+              "$ref": "#/definitions/SysBannerInfoResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_banner/create": {
+      "post": {
+        "description": "Create sys banner information | 创建SysBanner",
+        "tags": [
+          "sysbanner"
+        ],
+        "summary": "Create sys banner information | 创建SysBanner",
+        "operationId": "CreateSysBanner",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/SysBannerInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_banner/delete": {
+      "post": {
+        "description": "Delete sys banner information | 删除SysBanner信息",
+        "tags": [
+          "sysbanner"
+        ],
+        "summary": "Delete sys banner information | 删除SysBanner信息",
+        "operationId": "DeleteSysBanner",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/UUIDsReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_banner/list": {
+      "post": {
+        "description": "Get sys banner list | 获取SysBanner列表",
+        "tags": [
+          "sysbanner"
+        ],
+        "summary": "Get sys banner list | 获取SysBanner列表",
+        "operationId": "GetSysBannerList",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/SysBannerListReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SysBannerListResp",
+            "schema": {
+              "$ref": "#/definitions/SysBannerListResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_banner/update": {
+      "post": {
+        "description": "Update sys banner information | 更新SysBanner",
+        "tags": [
+          "sysbanner"
+        ],
+        "summary": "Update sys banner information | 更新SysBanner",
+        "operationId": "UpdateSysBanner",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/SysBannerInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_user_config": {
+      "post": {
+        "description": "Get sys user config by ID | 通过ID获取SysUserConfig",
+        "tags": [
+          "sysuserconfig"
+        ],
+        "summary": "Get sys user config by ID | 通过ID获取SysUserConfig",
+        "operationId": "GetSysUserConfigById",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/UUIDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SysUserConfigInfoResp",
+            "schema": {
+              "$ref": "#/definitions/SysUserConfigInfoResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_user_config/create": {
+      "post": {
+        "description": "Create sys user config information | 创建SysUserConfig",
+        "tags": [
+          "sysuserconfig"
+        ],
+        "summary": "Create sys user config information | 创建SysUserConfig",
+        "operationId": "CreateSysUserConfig",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/SysUserConfigInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_user_config/delete": {
+      "post": {
+        "description": "Delete sys user config information | 删除SysUserConfig信息",
+        "tags": [
+          "sysuserconfig"
+        ],
+        "summary": "Delete sys user config information | 删除SysUserConfig信息",
+        "operationId": "DeleteSysUserConfig",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/UUIDsReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_user_config/list": {
+      "post": {
+        "description": "Get sys user config list | 获取SysUserConfig列表",
+        "tags": [
+          "sysuserconfig"
+        ],
+        "summary": "Get sys user config list | 获取SysUserConfig列表",
+        "operationId": "GetSysUserConfigList",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/SysUserConfigListReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SysUserConfigListResp",
+            "schema": {
+              "$ref": "#/definitions/SysUserConfigListResp"
+            }
+          }
+        }
+      }
+    },
+    "/sys_user_config/update": {
+      "post": {
+        "description": "Update sys user config information | 更新SysUserConfig",
+        "tags": [
+          "sysuserconfig"
+        ],
+        "summary": "Update sys user config information | 更新SysUserConfig",
+        "operationId": "UpdateSysUserConfig",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/SysUserConfigInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
     "/task": {
       "post": {
         "description": "Get task by ID | 通过ID获取Task",
@@ -6668,6 +6948,306 @@
           "type": "string",
           "x-go-name": "Data",
           "$ref": "#/definitions/SmsProviderListInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysBannerInfo": {
+      "description": "The response data of sys banner information | SysBanner信息",
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "id": {
+          "description": "ID",
+          "type": "string",
+          "x-go-name": "Id"
+        },
+        "showAt": {
+          "description": "Show At | 1: web| 2:miniprogram | 展示位置 1网页 2小程序",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "ShowAt"
+        },
+        "status": {
+          "description": "Status 1: normal 2: ban | 状态 1 正常 2 禁用",
+          "type": "integer",
+          "format": "uint32",
+          "x-go-name": "Status"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        },
+        "url": {
+          "description": "Url | 图片链接",
+          "type": "string",
+          "x-go-name": "Url"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysBannerInfoResp": {
+      "description": "SysBanner information response | SysBanner信息返回体",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/SysBannerInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysBannerListInfo": {
+      "description": "SysBanner list data | SysBanner列表数据",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "The API list data | SysBanner列表数据",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SysBannerInfo"
+          },
+          "x-go-name": "Data"
+        },
+        "total": {
+          "description": "The total number of data | 数据总数",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Total"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysBannerListReq": {
+      "description": "Get sys banner list request params | SysBanner列表请求参数",
+      "type": "object",
+      "required": [
+        "page",
+        "pageSize"
+      ],
+      "properties": {
+        "page": {
+          "description": "Page number | 第几页",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "x-go-name": "Page"
+        },
+        "pageSize": {
+          "description": "Page size | 单页数据行数",
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 100000,
+          "x-go-name": "PageSize"
+        },
+        "url": {
+          "description": "Url",
+          "type": "string",
+          "x-go-name": "Url"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysBannerListResp": {
+      "description": "The response data of sys banner list | SysBanner列表数据",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/SysBannerListInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysUserConfigInfo": {
+      "description": "The response data of sys user config information | SysUserConfig信息",
+      "type": "object",
+      "properties": {
+        "anonymous": {
+          "description": "Anonymous | 匿名 0:不开启 1:开启",
+          "type": "boolean",
+          "x-go-name": "Anonymous"
+        },
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "emailIsCheck": {
+          "description": "Email Is Check | 邮箱是否通过验证 | 0 未通过 1 通过",
+          "type": "boolean",
+          "x-go-name": "EmailIsCheck"
+        },
+        "id": {
+          "description": "ID",
+          "type": "string",
+          "x-go-name": "Id"
+        },
+        "institute": {
+          "description": "institute | 学院",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "Institute"
+        },
+        "phoneIsCheck": {
+          "description": "Phone Is Check | 手机号是否验证通过 | 0 未通过 1 通过",
+          "type": "boolean",
+          "x-go-name": "PhoneIsCheck"
+        },
+        "showAnalysis": {
+          "description": "Show Analysis | 默认显示解析 0:不开启 1:开启",
+          "type": "boolean",
+          "x-go-name": "ShowAnalysis"
+        },
+        "showAnswer": {
+          "description": "Show Answer | 默认显示答案 0:不开启 1:开启",
+          "type": "boolean",
+          "x-go-name": "ShowAnswer"
+        },
+        "showComment": {
+          "description": "Show Comment | 默认显示评论 0:不开启 1:开启",
+          "type": "boolean",
+          "x-go-name": "ShowComment"
+        },
+        "stuid": {
+          "description": "Stuid | 学号",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "Stuid"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysUserConfigInfoResp": {
+      "description": "SysUserConfig information response | SysUserConfig信息返回体",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/SysUserConfigInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysUserConfigListInfo": {
+      "description": "SysUserConfig list data | SysUserConfig列表数据",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "The API list data | SysUserConfig列表数据",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SysUserConfigInfo"
+          },
+          "x-go-name": "Data"
+        },
+        "total": {
+          "description": "The total number of data | 数据总数",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Total"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysUserConfigListReq": {
+      "description": "Get sys user config list request params | SysUserConfig列表请求参数",
+      "type": "object",
+      "required": [
+        "page",
+        "pageSize"
+      ],
+      "properties": {
+        "page": {
+          "description": "Page number | 第几页",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "x-go-name": "Page"
+        },
+        "pageSize": {
+          "description": "Page size | 单页数据行数",
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 100000,
+          "x-go-name": "PageSize"
+        }
+      },
+      "x-go-package": "github.com/suyuan32/simple-admin-core/api/internal/types"
+    },
+    "SysUserConfigListResp": {
+      "description": "The response data of sys user config list | SysUserConfig列表数据",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/SysUserConfigListInfo"
         },
         "msg": {
           "description": "Message | 提示信息",

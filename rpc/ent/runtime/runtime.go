@@ -16,6 +16,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/schema"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysbanner"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysuserconfig"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/token"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/user"
 )
@@ -317,6 +319,54 @@ func init() {
 	roleDescSort := roleFields[4].Descriptor()
 	// role.DefaultSort holds the default value on creation for the sort field.
 	role.DefaultSort = roleDescSort.Default.(uint32)
+	sysbannerMixin := schema.SysBanner{}.Mixin()
+	sysbannerMixinFields0 := sysbannerMixin[0].Fields()
+	_ = sysbannerMixinFields0
+	sysbannerMixinFields1 := sysbannerMixin[1].Fields()
+	_ = sysbannerMixinFields1
+	sysbannerFields := schema.SysBanner{}.Fields()
+	_ = sysbannerFields
+	// sysbannerDescCreatedAt is the schema descriptor for created_at field.
+	sysbannerDescCreatedAt := sysbannerMixinFields0[1].Descriptor()
+	// sysbanner.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sysbanner.DefaultCreatedAt = sysbannerDescCreatedAt.Default.(func() time.Time)
+	// sysbannerDescUpdatedAt is the schema descriptor for updated_at field.
+	sysbannerDescUpdatedAt := sysbannerMixinFields0[2].Descriptor()
+	// sysbanner.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sysbanner.DefaultUpdatedAt = sysbannerDescUpdatedAt.Default.(func() time.Time)
+	// sysbanner.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sysbanner.UpdateDefaultUpdatedAt = sysbannerDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// sysbannerDescStatus is the schema descriptor for status field.
+	sysbannerDescStatus := sysbannerMixinFields1[0].Descriptor()
+	// sysbanner.DefaultStatus holds the default value on creation for the status field.
+	sysbanner.DefaultStatus = sysbannerDescStatus.Default.(uint8)
+	// sysbannerDescID is the schema descriptor for id field.
+	sysbannerDescID := sysbannerMixinFields0[0].Descriptor()
+	// sysbanner.DefaultID holds the default value on creation for the id field.
+	sysbanner.DefaultID = sysbannerDescID.Default.(func() uuid.UUID)
+	sysuserconfigMixin := schema.SysUserConfig{}.Mixin()
+	sysuserconfigMixinHooks1 := sysuserconfigMixin[1].Hooks()
+	sysuserconfig.Hooks[0] = sysuserconfigMixinHooks1[0]
+	sysuserconfigMixinInters1 := sysuserconfigMixin[1].Interceptors()
+	sysuserconfig.Interceptors[0] = sysuserconfigMixinInters1[0]
+	sysuserconfigMixinFields0 := sysuserconfigMixin[0].Fields()
+	_ = sysuserconfigMixinFields0
+	sysuserconfigFields := schema.SysUserConfig{}.Fields()
+	_ = sysuserconfigFields
+	// sysuserconfigDescCreatedAt is the schema descriptor for created_at field.
+	sysuserconfigDescCreatedAt := sysuserconfigMixinFields0[1].Descriptor()
+	// sysuserconfig.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sysuserconfig.DefaultCreatedAt = sysuserconfigDescCreatedAt.Default.(func() time.Time)
+	// sysuserconfigDescUpdatedAt is the schema descriptor for updated_at field.
+	sysuserconfigDescUpdatedAt := sysuserconfigMixinFields0[2].Descriptor()
+	// sysuserconfig.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sysuserconfig.DefaultUpdatedAt = sysuserconfigDescUpdatedAt.Default.(func() time.Time)
+	// sysuserconfig.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sysuserconfig.UpdateDefaultUpdatedAt = sysuserconfigDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// sysuserconfigDescID is the schema descriptor for id field.
+	sysuserconfigDescID := sysuserconfigMixinFields0[0].Descriptor()
+	// sysuserconfig.DefaultID holds the default value on creation for the id field.
+	sysuserconfig.DefaultID = sysuserconfigDescID.Default.(func() uuid.UUID)
 	tokenMixin := schema.Token{}.Mixin()
 	tokenMixinFields0 := tokenMixin[0].Fields()
 	_ = tokenMixinFields0

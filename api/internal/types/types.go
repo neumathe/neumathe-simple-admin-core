@@ -1664,3 +1664,99 @@ type ConfigurationInfoResp struct {
 	// Configuration information | 参数配置数据
 	Data ConfigurationInfo `json:"data"`
 }
+
+// The response data of sys banner information | SysBanner信息
+// swagger:model SysBannerInfo
+type SysBannerInfo struct {
+	BaseUUIDInfo
+	// Status 1: normal 2: ban | 状态 1 正常 2 禁用
+	Status *uint32 `json:"status,optional"`
+	// Show At | 1: web| 2:miniprogram | 展示位置 1网页 2小程序
+	ShowAt *int32 `json:"showAt,optional"`
+	// Url | 图片链接
+	Url *string `json:"url,optional"`
+}
+
+// The response data of sys banner list | SysBanner列表数据
+// swagger:model SysBannerListResp
+type SysBannerListResp struct {
+	BaseDataInfo
+	// SysBanner list data | SysBanner列表数据
+	Data SysBannerListInfo `json:"data"`
+}
+
+// SysBanner list data | SysBanner列表数据
+// swagger:model SysBannerListInfo
+type SysBannerListInfo struct {
+	BaseListInfo
+	// The API list data | SysBanner列表数据
+	Data []SysBannerInfo `json:"data"`
+}
+
+// Get sys banner list request params | SysBanner列表请求参数
+// swagger:model SysBannerListReq
+type SysBannerListReq struct {
+	PageInfo
+	// Url
+	Url *string `json:"url,optional"`
+}
+
+// SysBanner information response | SysBanner信息返回体
+// swagger:model SysBannerInfoResp
+type SysBannerInfoResp struct {
+	BaseDataInfo
+	// SysBanner information | SysBanner数据
+	Data SysBannerInfo `json:"data"`
+}
+
+// The response data of sys user config information | SysUserConfig信息
+// swagger:model SysUserConfigInfo
+type SysUserConfigInfo struct {
+	BaseUUIDInfo
+	// Anonymous | 匿名 0:不开启 1:开启
+	Anonymous *bool `json:"anonymous,optional"`
+	// Show Answer | 默认显示答案 0:不开启 1:开启
+	ShowAnswer *bool `json:"showAnswer,optional"`
+	// Show Analysis | 默认显示解析 0:不开启 1:开启
+	ShowAnalysis *bool `json:"showAnalysis,optional"`
+	// Show Comment | 默认显示评论 0:不开启 1:开启
+	ShowComment *bool `json:"showComment,optional"`
+	// Stuid | 学号
+	Stuid *int32 `json:"stuid,optional"`
+	// institute | 学院
+	Institute *int32 `json:"institute,optional"`
+	// Email Is Check | 邮箱是否通过验证 | 0 未通过 1 通过
+	EmailIsCheck *bool `json:"emailIsCheck,optional"`
+	// Phone Is Check | 手机号是否验证通过 | 0 未通过 1 通过
+	PhoneIsCheck *bool `json:"phoneIsCheck,optional"`
+}
+
+// The response data of sys user config list | SysUserConfig列表数据
+// swagger:model SysUserConfigListResp
+type SysUserConfigListResp struct {
+	BaseDataInfo
+	// SysUserConfig list data | SysUserConfig列表数据
+	Data SysUserConfigListInfo `json:"data"`
+}
+
+// SysUserConfig list data | SysUserConfig列表数据
+// swagger:model SysUserConfigListInfo
+type SysUserConfigListInfo struct {
+	BaseListInfo
+	// The API list data | SysUserConfig列表数据
+	Data []SysUserConfigInfo `json:"data"`
+}
+
+// Get sys user config list request params | SysUserConfig列表请求参数
+// swagger:model SysUserConfigListReq
+type SysUserConfigListReq struct {
+	PageInfo
+}
+
+// SysUserConfig information response | SysUserConfig信息返回体
+// swagger:model SysUserConfigInfoResp
+type SysUserConfigInfoResp struct {
+	BaseDataInfo
+	// SysUserConfig information | SysUserConfig数据
+	Data SysUserConfigInfo `json:"data"`
+}

@@ -8,6 +8,7 @@ import (
 
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/api"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/authority"
+	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/banner"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/base"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/configuration"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/department"
@@ -295,6 +296,58 @@ func (s *CoreServer) GetRoleById(ctx context.Context, in *core.IDReq) (*core.Rol
 func (s *CoreServer) DeleteRole(ctx context.Context, in *core.IDsReq) (*core.BaseResp, error) {
 	l := role.NewDeleteRoleLogic(ctx, s.svcCtx)
 	return l.DeleteRole(in)
+}
+
+// SysBanner management
+func (s *CoreServer) CreateSysBanner(ctx context.Context, in *core.SysBannerInfo) (*core.BaseUUIDResp, error) {
+	l := banner.NewCreateSysBannerLogic(ctx, s.svcCtx)
+	return l.CreateSysBanner(in)
+}
+
+func (s *CoreServer) UpdateSysBanner(ctx context.Context, in *core.SysBannerInfo) (*core.BaseResp, error) {
+	l := banner.NewUpdateSysBannerLogic(ctx, s.svcCtx)
+	return l.UpdateSysBanner(in)
+}
+
+func (s *CoreServer) GetSysBannerList(ctx context.Context, in *core.SysBannerListReq) (*core.SysBannerListResp, error) {
+	l := banner.NewGetSysBannerListLogic(ctx, s.svcCtx)
+	return l.GetSysBannerList(in)
+}
+
+func (s *CoreServer) GetSysBannerById(ctx context.Context, in *core.UUIDReq) (*core.SysBannerInfo, error) {
+	l := banner.NewGetSysBannerByIdLogic(ctx, s.svcCtx)
+	return l.GetSysBannerById(in)
+}
+
+func (s *CoreServer) DeleteSysBanner(ctx context.Context, in *core.UUIDsReq) (*core.BaseResp, error) {
+	l := banner.NewDeleteSysBannerLogic(ctx, s.svcCtx)
+	return l.DeleteSysBanner(in)
+}
+
+// SysUserConfig management
+func (s *CoreServer) CreateSysUserConfig(ctx context.Context, in *core.SysUserConfigInfo) (*core.BaseUUIDResp, error) {
+	l := user.NewCreateSysUserConfigLogic(ctx, s.svcCtx)
+	return l.CreateSysUserConfig(in)
+}
+
+func (s *CoreServer) UpdateSysUserConfig(ctx context.Context, in *core.SysUserConfigInfo) (*core.BaseResp, error) {
+	l := user.NewUpdateSysUserConfigLogic(ctx, s.svcCtx)
+	return l.UpdateSysUserConfig(in)
+}
+
+func (s *CoreServer) GetSysUserConfigList(ctx context.Context, in *core.SysUserConfigListReq) (*core.SysUserConfigListResp, error) {
+	l := user.NewGetSysUserConfigListLogic(ctx, s.svcCtx)
+	return l.GetSysUserConfigList(in)
+}
+
+func (s *CoreServer) GetSysUserConfigById(ctx context.Context, in *core.UUIDReq) (*core.SysUserConfigInfo, error) {
+	l := user.NewGetSysUserConfigByIdLogic(ctx, s.svcCtx)
+	return l.GetSysUserConfigById(in)
+}
+
+func (s *CoreServer) DeleteSysUserConfig(ctx context.Context, in *core.UUIDsReq) (*core.BaseResp, error) {
+	l := user.NewDeleteSysUserConfigLogic(ctx, s.svcCtx)
+	return l.DeleteSysUserConfig(in)
 }
 
 // Token management

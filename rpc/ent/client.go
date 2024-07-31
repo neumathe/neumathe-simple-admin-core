@@ -25,6 +25,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysbanner"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/sysuserconfig"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/token"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/user"
 
@@ -54,6 +56,10 @@ type Client struct {
 	Position *PositionClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
+	// SysBanner is the client for interacting with the SysBanner builders.
+	SysBanner *SysBannerClient
+	// SysUserConfig is the client for interacting with the SysUserConfig builders.
+	SysUserConfig *SysUserConfigClient
 	// Token is the client for interacting with the Token builders.
 	Token *TokenClient
 	// User is the client for interacting with the User builders.
@@ -78,6 +84,8 @@ func (c *Client) init() {
 	c.OauthProvider = NewOauthProviderClient(c.config)
 	c.Position = NewPositionClient(c.config)
 	c.Role = NewRoleClient(c.config)
+	c.SysBanner = NewSysBannerClient(c.config)
+	c.SysUserConfig = NewSysUserConfigClient(c.config)
 	c.Token = NewTokenClient(c.config)
 	c.User = NewUserClient(c.config)
 }
@@ -181,6 +189,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		OauthProvider:    NewOauthProviderClient(cfg),
 		Position:         NewPositionClient(cfg),
 		Role:             NewRoleClient(cfg),
+		SysBanner:        NewSysBannerClient(cfg),
+		SysUserConfig:    NewSysUserConfigClient(cfg),
 		Token:            NewTokenClient(cfg),
 		User:             NewUserClient(cfg),
 	}, nil
@@ -211,6 +221,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		OauthProvider:    NewOauthProviderClient(cfg),
 		Position:         NewPositionClient(cfg),
 		Role:             NewRoleClient(cfg),
+		SysBanner:        NewSysBannerClient(cfg),
+		SysUserConfig:    NewSysUserConfigClient(cfg),
 		Token:            NewTokenClient(cfg),
 		User:             NewUserClient(cfg),
 	}, nil
@@ -243,7 +255,8 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.API, c.Configuration, c.Department, c.Dictionary, c.DictionaryDetail, c.Menu,
-		c.OauthProvider, c.Position, c.Role, c.Token, c.User,
+		c.OauthProvider, c.Position, c.Role, c.SysBanner, c.SysUserConfig, c.Token,
+		c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -254,7 +267,8 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.API, c.Configuration, c.Department, c.Dictionary, c.DictionaryDetail, c.Menu,
-		c.OauthProvider, c.Position, c.Role, c.Token, c.User,
+		c.OauthProvider, c.Position, c.Role, c.SysBanner, c.SysUserConfig, c.Token,
+		c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -281,6 +295,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Position.mutate(ctx, m)
 	case *RoleMutation:
 		return c.Role.mutate(ctx, m)
+	case *SysBannerMutation:
+		return c.SysBanner.mutate(ctx, m)
+	case *SysUserConfigMutation:
+		return c.SysUserConfig.mutate(ctx, m)
 	case *TokenMutation:
 		return c.Token.mutate(ctx, m)
 	case *UserMutation:
@@ -1663,6 +1681,274 @@ func (c *RoleClient) mutate(ctx context.Context, m *RoleMutation) (Value, error)
 	}
 }
 
+// SysBannerClient is a client for the SysBanner schema.
+type SysBannerClient struct {
+	config
+}
+
+// NewSysBannerClient returns a client for the SysBanner from the given config.
+func NewSysBannerClient(c config) *SysBannerClient {
+	return &SysBannerClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sysbanner.Hooks(f(g(h())))`.
+func (c *SysBannerClient) Use(hooks ...Hook) {
+	c.hooks.SysBanner = append(c.hooks.SysBanner, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sysbanner.Intercept(f(g(h())))`.
+func (c *SysBannerClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SysBanner = append(c.inters.SysBanner, interceptors...)
+}
+
+// Create returns a builder for creating a SysBanner entity.
+func (c *SysBannerClient) Create() *SysBannerCreate {
+	mutation := newSysBannerMutation(c.config, OpCreate)
+	return &SysBannerCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SysBanner entities.
+func (c *SysBannerClient) CreateBulk(builders ...*SysBannerCreate) *SysBannerCreateBulk {
+	return &SysBannerCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SysBannerClient) MapCreateBulk(slice any, setFunc func(*SysBannerCreate, int)) *SysBannerCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SysBannerCreateBulk{err: fmt.Errorf("calling to SysBannerClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SysBannerCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SysBannerCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SysBanner.
+func (c *SysBannerClient) Update() *SysBannerUpdate {
+	mutation := newSysBannerMutation(c.config, OpUpdate)
+	return &SysBannerUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SysBannerClient) UpdateOne(sb *SysBanner) *SysBannerUpdateOne {
+	mutation := newSysBannerMutation(c.config, OpUpdateOne, withSysBanner(sb))
+	return &SysBannerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SysBannerClient) UpdateOneID(id uuid.UUID) *SysBannerUpdateOne {
+	mutation := newSysBannerMutation(c.config, OpUpdateOne, withSysBannerID(id))
+	return &SysBannerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SysBanner.
+func (c *SysBannerClient) Delete() *SysBannerDelete {
+	mutation := newSysBannerMutation(c.config, OpDelete)
+	return &SysBannerDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SysBannerClient) DeleteOne(sb *SysBanner) *SysBannerDeleteOne {
+	return c.DeleteOneID(sb.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SysBannerClient) DeleteOneID(id uuid.UUID) *SysBannerDeleteOne {
+	builder := c.Delete().Where(sysbanner.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SysBannerDeleteOne{builder}
+}
+
+// Query returns a query builder for SysBanner.
+func (c *SysBannerClient) Query() *SysBannerQuery {
+	return &SysBannerQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSysBanner},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SysBanner entity by its id.
+func (c *SysBannerClient) Get(ctx context.Context, id uuid.UUID) (*SysBanner, error) {
+	return c.Query().Where(sysbanner.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SysBannerClient) GetX(ctx context.Context, id uuid.UUID) *SysBanner {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SysBannerClient) Hooks() []Hook {
+	return c.hooks.SysBanner
+}
+
+// Interceptors returns the client interceptors.
+func (c *SysBannerClient) Interceptors() []Interceptor {
+	return c.inters.SysBanner
+}
+
+func (c *SysBannerClient) mutate(ctx context.Context, m *SysBannerMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SysBannerCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SysBannerUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SysBannerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SysBannerDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown SysBanner mutation op: %q", m.Op())
+	}
+}
+
+// SysUserConfigClient is a client for the SysUserConfig schema.
+type SysUserConfigClient struct {
+	config
+}
+
+// NewSysUserConfigClient returns a client for the SysUserConfig from the given config.
+func NewSysUserConfigClient(c config) *SysUserConfigClient {
+	return &SysUserConfigClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sysuserconfig.Hooks(f(g(h())))`.
+func (c *SysUserConfigClient) Use(hooks ...Hook) {
+	c.hooks.SysUserConfig = append(c.hooks.SysUserConfig, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sysuserconfig.Intercept(f(g(h())))`.
+func (c *SysUserConfigClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SysUserConfig = append(c.inters.SysUserConfig, interceptors...)
+}
+
+// Create returns a builder for creating a SysUserConfig entity.
+func (c *SysUserConfigClient) Create() *SysUserConfigCreate {
+	mutation := newSysUserConfigMutation(c.config, OpCreate)
+	return &SysUserConfigCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SysUserConfig entities.
+func (c *SysUserConfigClient) CreateBulk(builders ...*SysUserConfigCreate) *SysUserConfigCreateBulk {
+	return &SysUserConfigCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SysUserConfigClient) MapCreateBulk(slice any, setFunc func(*SysUserConfigCreate, int)) *SysUserConfigCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SysUserConfigCreateBulk{err: fmt.Errorf("calling to SysUserConfigClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SysUserConfigCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SysUserConfigCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SysUserConfig.
+func (c *SysUserConfigClient) Update() *SysUserConfigUpdate {
+	mutation := newSysUserConfigMutation(c.config, OpUpdate)
+	return &SysUserConfigUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SysUserConfigClient) UpdateOne(suc *SysUserConfig) *SysUserConfigUpdateOne {
+	mutation := newSysUserConfigMutation(c.config, OpUpdateOne, withSysUserConfig(suc))
+	return &SysUserConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SysUserConfigClient) UpdateOneID(id uuid.UUID) *SysUserConfigUpdateOne {
+	mutation := newSysUserConfigMutation(c.config, OpUpdateOne, withSysUserConfigID(id))
+	return &SysUserConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SysUserConfig.
+func (c *SysUserConfigClient) Delete() *SysUserConfigDelete {
+	mutation := newSysUserConfigMutation(c.config, OpDelete)
+	return &SysUserConfigDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SysUserConfigClient) DeleteOne(suc *SysUserConfig) *SysUserConfigDeleteOne {
+	return c.DeleteOneID(suc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SysUserConfigClient) DeleteOneID(id uuid.UUID) *SysUserConfigDeleteOne {
+	builder := c.Delete().Where(sysuserconfig.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SysUserConfigDeleteOne{builder}
+}
+
+// Query returns a query builder for SysUserConfig.
+func (c *SysUserConfigClient) Query() *SysUserConfigQuery {
+	return &SysUserConfigQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSysUserConfig},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SysUserConfig entity by its id.
+func (c *SysUserConfigClient) Get(ctx context.Context, id uuid.UUID) (*SysUserConfig, error) {
+	return c.Query().Where(sysuserconfig.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SysUserConfigClient) GetX(ctx context.Context, id uuid.UUID) *SysUserConfig {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SysUserConfigClient) Hooks() []Hook {
+	hooks := c.hooks.SysUserConfig
+	return append(hooks[:len(hooks):len(hooks)], sysuserconfig.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SysUserConfigClient) Interceptors() []Interceptor {
+	inters := c.inters.SysUserConfig
+	return append(inters[:len(inters):len(inters)], sysuserconfig.Interceptors[:]...)
+}
+
+func (c *SysUserConfigClient) mutate(ctx context.Context, m *SysUserConfigMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SysUserConfigCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SysUserConfigUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SysUserConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SysUserConfigDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown SysUserConfig mutation op: %q", m.Op())
+	}
+}
+
 // TokenClient is a client for the Token schema.
 type TokenClient struct {
 	config
@@ -1983,11 +2269,12 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 type (
 	hooks struct {
 		API, Configuration, Department, Dictionary, DictionaryDetail, Menu,
-		OauthProvider, Position, Role, Token, User []ent.Hook
+		OauthProvider, Position, Role, SysBanner, SysUserConfig, Token, User []ent.Hook
 	}
 	inters struct {
 		API, Configuration, Department, Dictionary, DictionaryDetail, Menu,
-		OauthProvider, Position, Role, Token, User []ent.Interceptor
+		OauthProvider, Position, Role, SysBanner, SysUserConfig, Token,
+		User []ent.Interceptor
 	}
 )
 

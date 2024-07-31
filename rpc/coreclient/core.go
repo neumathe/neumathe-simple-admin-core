@@ -55,6 +55,12 @@ type (
 	RoleListResp             = core.RoleListResp
 	RoleMenuAuthorityReq     = core.RoleMenuAuthorityReq
 	RoleMenuAuthorityResp    = core.RoleMenuAuthorityResp
+	SysBannerInfo            = core.SysBannerInfo
+	SysBannerListReq         = core.SysBannerListReq
+	SysBannerListResp        = core.SysBannerListResp
+	SysUserConfigInfo        = core.SysUserConfigInfo
+	SysUserConfigListReq     = core.SysUserConfigListReq
+	SysUserConfigListResp    = core.SysUserConfigListResp
 	TokenInfo                = core.TokenInfo
 	TokenListReq             = core.TokenListReq
 	TokenListResp            = core.TokenListResp
@@ -125,6 +131,18 @@ type (
 		GetRoleList(ctx context.Context, in *RoleListReq, opts ...grpc.CallOption) (*RoleListResp, error)
 		GetRoleById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*RoleInfo, error)
 		DeleteRole(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+		// SysBanner management
+		CreateSysBanner(ctx context.Context, in *SysBannerInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error)
+		UpdateSysBanner(ctx context.Context, in *SysBannerInfo, opts ...grpc.CallOption) (*BaseResp, error)
+		GetSysBannerList(ctx context.Context, in *SysBannerListReq, opts ...grpc.CallOption) (*SysBannerListResp, error)
+		GetSysBannerById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*SysBannerInfo, error)
+		DeleteSysBanner(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+		// SysUserConfig management
+		CreateSysUserConfig(ctx context.Context, in *SysUserConfigInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error)
+		UpdateSysUserConfig(ctx context.Context, in *SysUserConfigInfo, opts ...grpc.CallOption) (*BaseResp, error)
+		GetSysUserConfigList(ctx context.Context, in *SysUserConfigListReq, opts ...grpc.CallOption) (*SysUserConfigListResp, error)
+		GetSysUserConfigById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*SysUserConfigInfo, error)
+		DeleteSysUserConfig(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error)
 		// Token management
 		CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error)
 		DeleteToken(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error)
@@ -413,6 +431,58 @@ func (m *defaultCore) GetRoleById(ctx context.Context, in *IDReq, opts ...grpc.C
 func (m *defaultCore) DeleteRole(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.DeleteRole(ctx, in, opts...)
+}
+
+// SysBanner management
+func (m *defaultCore) CreateSysBanner(ctx context.Context, in *SysBannerInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.CreateSysBanner(ctx, in, opts...)
+}
+
+func (m *defaultCore) UpdateSysBanner(ctx context.Context, in *SysBannerInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.UpdateSysBanner(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetSysBannerList(ctx context.Context, in *SysBannerListReq, opts ...grpc.CallOption) (*SysBannerListResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetSysBannerList(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetSysBannerById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*SysBannerInfo, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetSysBannerById(ctx, in, opts...)
+}
+
+func (m *defaultCore) DeleteSysBanner(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.DeleteSysBanner(ctx, in, opts...)
+}
+
+// SysUserConfig management
+func (m *defaultCore) CreateSysUserConfig(ctx context.Context, in *SysUserConfigInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.CreateSysUserConfig(ctx, in, opts...)
+}
+
+func (m *defaultCore) UpdateSysUserConfig(ctx context.Context, in *SysUserConfigInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.UpdateSysUserConfig(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetSysUserConfigList(ctx context.Context, in *SysUserConfigListReq, opts ...grpc.CallOption) (*SysUserConfigListResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetSysUserConfigList(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetSysUserConfigById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*SysUserConfigInfo, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetSysUserConfigById(ctx, in, opts...)
+}
+
+func (m *defaultCore) DeleteSysUserConfig(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.DeleteSysUserConfig(ctx, in, opts...)
 }
 
 // Token management

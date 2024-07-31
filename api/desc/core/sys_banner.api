@@ -1,0 +1,77 @@
+import "../base.api"
+
+type (
+    // The response data of sys banner information | SysBanner信息
+    SysBannerInfo {
+        BaseUUIDInfo
+
+        // Status 1: normal 2: ban | 状态 1 正常 2 禁用
+        Status  *uint32 `json:"status,optional"`
+
+        // Show At | 1: web| 2:miniprogram | 展示位置 1网页 2小程序
+        ShowAt  *int32 `json:"showAt,optional"`
+
+        // Url | 图片链接
+        Url  *string `json:"url,optional"`
+    }
+
+    // The response data of sys banner list | SysBanner列表数据
+    SysBannerListResp {
+        BaseDataInfo
+
+        // SysBanner list data | SysBanner列表数据
+        Data SysBannerListInfo `json:"data"`
+    }
+
+    // SysBanner list data | SysBanner列表数据
+    SysBannerListInfo {
+        BaseListInfo
+
+        // The API list data | SysBanner列表数据
+        Data  []SysBannerInfo  `json:"data"`
+    }
+
+    // Get sys banner list request params | SysBanner列表请求参数
+    SysBannerListReq {
+        PageInfo
+
+        // Url
+        Url  *string `json:"url,optional"`
+    }
+
+    // SysBanner information response | SysBanner信息返回体
+    SysBannerInfoResp {
+        BaseDataInfo
+
+        // SysBanner information | SysBanner数据
+        Data SysBannerInfo `json:"data"`
+    }
+)
+
+@server(
+    jwt: Auth
+    group: sysbanner
+    middleware: Authority
+)
+
+service Core {
+    // Create sys banner information | 创建SysBanner
+    @handler createSysBanner
+    post /sys_banner/create (SysBannerInfo) returns (BaseMsgResp)
+
+    // Update sys banner information | 更新SysBanner
+    @handler updateSysBanner
+    post /sys_banner/update (SysBannerInfo) returns (BaseMsgResp)
+
+    // Delete sys banner information | 删除SysBanner信息
+    @handler deleteSysBanner
+    post /sys_banner/delete (UUIDsReq) returns (BaseMsgResp)
+
+    // Get sys banner list | 获取SysBanner列表
+    @handler getSysBannerList
+    post /sys_banner/list (SysBannerListReq) returns (SysBannerListResp)
+
+    // Get sys banner by ID | 通过ID获取SysBanner
+    @handler getSysBannerById
+    post /sys_banner (UUIDReq) returns (SysBannerInfoResp)
+}

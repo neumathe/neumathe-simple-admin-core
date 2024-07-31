@@ -31,6 +31,12 @@ func (l *DeleteUserLogic) DeleteUser(req *types.UUIDsReq) (resp *types.BaseMsgRe
 	if err != nil {
 		return nil, err
 	}
+	_, err = l.svcCtx.CoreRpc.DeleteSysUserConfig(l.ctx, &core.UUIDsReq{
+		Ids: req.Ids,
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.BaseMsgResp{Msg: l.svcCtx.Trans.Trans(l.ctx, result.Msg)}, nil
 }
