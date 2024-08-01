@@ -3,14 +3,13 @@ package user
 import (
 	"context"
 
-	"github.com/suyuan32/simple-admin-core/rpc/ent/sysuserconfig"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/predicate"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
-    "github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetSysUserConfigListLogic struct {
@@ -40,17 +39,17 @@ func (l *GetSysUserConfigListLogic) GetSysUserConfigList(in *core.SysUserConfigL
 
 	for _, v := range result.List {
 		resp.Data = append(resp.Data, &core.SysUserConfigInfo{
-			Id:          pointy.GetPointer(v.ID.String()),
-			CreatedAt:   pointy.GetPointer(v.CreatedAt.UnixMilli()),
-			UpdatedAt:   pointy.GetPointer(v.UpdatedAt.UnixMilli()),
-			Anonymous:	&v.Anonymous,
-			ShowAnswer:	&v.ShowAnswer,
-			ShowAnalysis:	&v.ShowAnalysis,
-			ShowComment:	&v.ShowComment,
-			Stuid:	&v.Stuid,
-			Institute:	pointy.GetPointer(int32(v.Institute)),
-			EmailIsCheck:	&v.EmailIsCheck,
-			PhoneIsCheck:	&v.PhoneIsCheck,
+			Id:           pointy.GetPointer(v.ID.String()),
+			CreatedAt:    pointy.GetPointer(v.CreatedAt.UnixMilli()),
+			UpdatedAt:    pointy.GetPointer(v.UpdatedAt.UnixMilli()),
+			Anonymous:    &v.Anonymous,
+			ShowAnswer:   &v.ShowAnswer,
+			ShowAnalysis: &v.ShowAnalysis,
+			ShowComment:  &v.ShowComment,
+			Stuid:        &v.Stuid,
+			Institute:    pointy.GetPointer(int32(v.Institute)),
+			EmailIsCheck: &v.EmailIsCheck,
+			PhoneIsCheck: &v.PhoneIsCheck,
 		})
 	}
 

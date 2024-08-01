@@ -46,7 +46,8 @@
 		"sms_provider": "SMS Provider",
 		"sms_log": "SMS Log",
 		"message_sender": "Send Message",
-		"configuration": "System Configuration"
+		"configuration": "System Configuration",
+		"sys_banner": "Banner Management"
 	},
 	"apiDesc": {
 		"createConfiguration": "Create a configuration",
@@ -235,7 +236,8 @@
 		"storageProviderManagement": "Storage Provider",
 		"cloudFileManagement": "Cloud File",
 		"cloudFileTagManagement": "Cloud File's Tag",
-		"configurationManagement": "System Config"
+		"configurationManagement": "System Config",
+		"bannerManagement": "Banner Management"
 	},
 	"login": {
 		"loginSuccessTitle": "Login successful",
