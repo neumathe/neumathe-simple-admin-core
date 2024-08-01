@@ -208,4 +208,7 @@ You are very welcome to join！[Raise an issue](https://github.com/suyuan32/simp
 
 ## License
 
-[MIT © Ryan-2022](./LICENSE)
+- The original project code is licensed under the MIT License. [MIT © Ryan-2022](./.LICENSE)
+- All modifications and new additions to the project are licensed under the GNU General Public License (GPL). [GNU General Public License v3.0 © ywxisky-2024](./LICENSE) 
+
+For more details, please refer to the `LICENSE` file for GPL terms and the `.LICENSE` file for MIT terms.
